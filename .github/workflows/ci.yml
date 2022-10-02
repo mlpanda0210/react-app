@@ -38,10 +38,23 @@ jobs:
         env:
           CI: true
 
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage
+          path: coverage
+
       - name: Build Project
         # プッシュの場合はビルドする
         if: github.event_name =='push'
         run: npm run build
+      - uses: actions/download-artifact
+
+      - name: Upload Build Folder
+        uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: build
       # プッシュの場合はデプロイする
       - name: Deploy to Staging
         if: github.event_name =='push'
