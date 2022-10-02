@@ -54,8 +54,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: build
-          path: build
-      - uses: actions/download-artifact
+          path: buildz
 
       # プッシュの場合はデプロイする
       - name: Deploy to Staging
