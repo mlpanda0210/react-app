@@ -1,28 +1,43 @@
 name: CI
 on:
+  # ここにトリガーを書く
   pull_request:
+    # ブランチ
     branches: [develop]
 
   push:
     branches: [develop]
 
+#ジョブをかく
 jobs:
+  #ジョブ名
   build:
+    #
     runs-on: ubuntu-latest
     steps:
+      #
       - uses: actions/checkout@v2
+
+      # フォーマットチェック
       - name: Use NodeJS
+        # オプショナル
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
+      # npm install と同じ
       - run: npm ci
+      # フォーマットチェック
       - run: npm run format:check
+      # テストの実行
       - run: npm test -- --coverage
         env:
           CI: true
+
       - name: Build Project
+        # プッシュの場合はビルドする
         if: github.event_name =='push'
         run: npm run build
+      # プッシュの場合はデプロイする
       - name: Deploy to Staging
         if: github.event_name =='push'
         run: npx surge --project ./build --domain shiny-payment.surge.sh
